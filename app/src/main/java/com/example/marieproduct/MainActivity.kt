@@ -41,44 +41,5 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    var test by remember{ mutableStateOf(0)}
-    var firstName by remember { mutableStateOf("essai") }
-    Column (modifier = modifier){
-        Text(
-            text = "Valeur de la variable : ${test}!",
 
-        )
-
-        TextField(
-            value = firstName,
-            onValueChange = { value ->
-                firstName=value
-            }
-        )
-
-        Image (
-            painter = painterResource(R.drawable.ic_launcher_foreground),
-            contentDescription = "Icone de l'application"
-        )
-
-        Button(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = {
-                test += 1
-            },
-            content = {
-                Text("Incrémenter la variable", modifier = Modifier.padding(30.dp))
-            }
-        )
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    MarieProductTheme {
-        Greeting("Android")
-    }
-}
+//Tests de mise en page :
