@@ -27,8 +27,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavEntry
 import androidx.navigation3.ui.NavDisplay
+import com.example.marieproduct.data.Product
 import com.example.marieproduct.data.Routes
 import com.example.marieproduct.ui.theme.MarieProductTheme
+import com.example.marieproduct.view.APIScreen
 import com.example.marieproduct.view.FormScreen
 import com.example.marieproduct.view.HomeScreen
 
@@ -48,24 +50,42 @@ class MainActivity : ComponentActivity() {
                     )
                 }
 
-                //FormScreen()
+                var savedProduct by remember { mutableStateOf<Product?>(null)}
+
+                // Ceci me permet de lister toutes les directions possibles selon la page. Toutes les pages doivent être répertoriées et les directions de chacune listées à l'aide des fonctions qui les appellent.
                 NavDisplay(
                     backStack = backStack,
                     onBack = { backStack.removeLastOrNull() },
                     entryProvider = { key ->
                         when (key) {
                             Routes.Home -> NavEntry(key) {
+                                //HomeScreen permet d'accéder à 2 pages : Form et Api
                                 HomeScreen(
                                     //ici je peux donner un nom à l'élément à passer en parametre de Form() et qui remplacerait it
                                     //ex: navigateToForm = { productName
+                                    product = savedProduct,
                                     navigateToForm = {
-                                        backStack.add(Routes.Form(it))
+                                        backStack.add(Routes.Form(""))
+                                    },
+                                    navigateToApi = {
+                                        backStack.add(Routes.API)
                                     }
                                 )
                             }
 
                             is Routes.Form -> NavEntry(key) {
-                                FormScreen(productName = key.productName,
+                                FormScreen(
+                                    productName = key.productName,
+                                    onValidate = { product ->
+                                        savedProduct = product
+                                        backStack.removeLastOrNull()
+                                    }
+                                )
+                            }
+
+                            is Routes.API -> NavEntry(key) {
+                                APIScreen(
+
                                     onBack = {
                                         backStack.removeLastOrNull()
                                     }

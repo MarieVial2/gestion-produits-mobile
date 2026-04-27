@@ -28,17 +28,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.marieproduct.R
+import com.example.marieproduct.data.Product
 import com.example.marieproduct.ui.theme.MarieProductTheme
 import kotlinx.coroutines.selects.select
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormScreen(productName: String, onBack: () -> Unit) {
+fun FormScreen(productName: String, onValidate: (Product) -> Unit) {
 
     var productName by remember { mutableStateOf(productName) }
     var country by remember { mutableStateOf("") }
     var selectedOption by remember { mutableStateOf("")}
     var checked by remember { mutableStateOf(false)}
+
 
 
     Scaffold(
@@ -129,12 +131,14 @@ fun FormScreen(productName: String, onBack: () -> Unit) {
 
                 Button(
                     onClick = {
-                        onBack()
+                        val product = Product(productName, country)
+                        onValidate(product)
                     },
                     content = {
                         Text("Ajouter produit", modifier = Modifier.padding(15.dp))
                     }
                 )
+
 
 
 
