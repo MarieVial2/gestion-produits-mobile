@@ -1,14 +1,13 @@
 package com.example.marieproduct.view
 
-import android.R.attr.enabled
-import android.R.attr.label
-import android.R.attr.text
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -34,9 +33,9 @@ import kotlinx.coroutines.selects.select
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun FormScreen() {
+fun FormScreen(productName: String, onBack: () -> Unit) {
 
-    var productName by remember { mutableStateOf("") }
+    var productName by remember { mutableStateOf(productName) }
     var country by remember { mutableStateOf("") }
     var selectedOption by remember { mutableStateOf("")}
     var checked by remember { mutableStateOf(false)}
@@ -51,8 +50,10 @@ fun FormScreen() {
         content = { padding ->
 
             Column(
-
-                modifier = Modifier.padding(padding).padding(32.dp),
+    // L'ordre est important : d'abord le padding de la fenetre, puis le scroll puis du padding
+                modifier = Modifier.padding(padding).verticalScroll(
+                    rememberScrollState()
+                ).padding(32.dp),
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ){
@@ -124,14 +125,20 @@ fun FormScreen() {
                         text = "A ajouter aux favoris"
                     )
                 }
+
+
                 Button(
                     onClick = {
-
+                        onBack()
                     },
                     content = {
                         Text("Ajouter produit", modifier = Modifier.padding(15.dp))
                     }
                 )
+
+
+
+
 
             }
         }
@@ -140,10 +147,10 @@ fun FormScreen() {
 
 
 
-@Preview
+/* @Preview
 @Composable
 fun FormScreenPreview() {
     MarieProductTheme {
         FormScreen()
     }
-}
+}*/

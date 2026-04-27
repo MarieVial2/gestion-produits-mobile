@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -24,8 +25,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation3.runtime.NavEntry
+import androidx.navigation3.ui.NavDisplay
+import com.example.marieproduct.data.Routes
 import com.example.marieproduct.ui.theme.MarieProductTheme
 import com.example.marieproduct.view.FormScreen
+import com.example.marieproduct.view.HomeScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,8 +39,41 @@ class MainActivity : ComponentActivity() {
         Log.d("MainActivity", "onCreate Called $a")
         enableEdgeToEdge()
         setContent {
+
             MarieProductTheme {
-                FormScreen()
+
+                val backStack = remember {
+                    mutableStateListOf<Routes>(
+                        Routes.Home
+                    )
+                }
+
+                //FormScreen()
+                NavDisplay(
+                    backStack = backStack,
+                    onBack = { backStack.removeLastOrNull() },
+                    entryProvider = { key ->
+                        when (key) {
+                            Routes.Home -> NavEntry(key) {
+                                HomeScreen(
+                                    //ici je peux donner un nom à l'élément à passer en parametre de Form() et qui remplacerait it
+                                    //ex: navigateToForm = { productName
+                                    navigateToForm = {
+                                        backStack.add(Routes.Form(it))
+                                    }
+                                )
+                            }
+
+                            is Routes.Form -> NavEntry(key) {
+                                FormScreen(productName = key.productName,
+                                    onBack = {
+                                        backStack.removeLastOrNull()
+                                    }
+                                )
+                            }
+                        }
+                    }
+                )
             }
         }
     }
