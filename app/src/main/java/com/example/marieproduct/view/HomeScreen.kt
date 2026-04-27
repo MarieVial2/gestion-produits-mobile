@@ -27,7 +27,7 @@ fun HomeScreen (product: Product?, navigateToForm: (productName: String) -> Unit
             }
 
 
-            Text(text= "${product?.name ?: "Pas de données"} ${product?.country ?: "Pas de données"}")
+            Text(text= "${product?.name ?: "Pas de données"} - ${product?.country ?: "Pas de données"}")
             //Text(text= product?.name ?: "Pas de données")
             //ou
             //Text("${product.name ?: "aucun produit"}")
