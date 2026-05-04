@@ -131,7 +131,7 @@ fun FormScreen(productName: String, onValidate: (Product) -> Unit) {
 
                 Button(
                     onClick = {
-                        val product = Product(productName, country)
+                        val product = Product(productName, country, selectedOption, checked)
                         onValidate(product)
                     },
                     content = {

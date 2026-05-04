@@ -49,8 +49,9 @@ class MainActivity : ComponentActivity() {
                         Routes.Home
                     )
                 }
-
-                var savedProduct by remember { mutableStateOf<Product?>(null)}
+                //var product by remember { mutableStateOf<Int>(0) }
+                //var savedProduct by remember { mutableStateOf<Product?>(null)}
+                var products = remember { mutableStateListOf<Product>() }
 
                 // Ceci me permet de lister toutes les directions possibles selon la page. Toutes les pages doivent être répertoriées et les directions de chacune listées à l'aide des fonctions qui les appellent.
                 NavDisplay(
@@ -63,13 +64,19 @@ class MainActivity : ComponentActivity() {
                                 HomeScreen(
                                     //ici je peux donner un nom à l'élément à passer en parametre de Form() et qui remplacerait it
                                     //ex: navigateToForm = { productName
-                                    product = savedProduct,
+                                    //product = savedProduct,
+                                    products,
                                     navigateToForm = {
                                         backStack.add(Routes.Form(""))
                                     },
                                     navigateToApi = {
                                         backStack.add(Routes.API)
+                                    },
+                                    onDelete = { product ->
+                                        products.remove(product)
                                     }
+                                //ou : onDelete = { products.remove(it) }
+
                                 )
                             }
 
@@ -77,7 +84,8 @@ class MainActivity : ComponentActivity() {
                                 FormScreen(
                                     productName = key.productName,
                                     onValidate = { product ->
-                                        savedProduct = product
+
+                                        products.add(product)
                                         backStack.removeLastOrNull()
                                     }
                                 )
